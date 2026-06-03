@@ -29,7 +29,7 @@ import torch.nn as nn
 # General information
 path_data = 'data-files/'
 general_dataset_type = "Xu"
-dataset_type = "flamelet_augm"
+dataset_type = "flamelet-augm"
 device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 logging.info(f"My device: {device}")
 current_time = datetime.now()
