@@ -29,7 +29,7 @@ import torch.nn as nn
 # General information
 path_data = 'data-files/'
 general_dataset_type = "Xu"
-dataset_type = "autoignition_augm2"
+dataset_type = "flamelet_augm"
 device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 logging.info(f"My device: {device}")
 current_time = datetime.now()
@@ -56,7 +56,7 @@ extra_manifold_parameters = ["mf"]
 range_extra_manifold_parameters = 1 #from -x/2 to x/2
 
 # Input/output data
-perc_val = 0.1 #0.2 #percentage of validation data
+perc_val = 0.2 #percentage of validation data
 list_species_input = ['H2NN', 'H2O2', 'H2O', 'H2', 'HNO', 'HO2', 'HONO2', 'HONO', 'H', 'N2O', 'NH2', 'NH', 'NNH', 'NO2', 'NO', 'N', 'O2', 'OH', 'O']
 list_species_output_evaluation = ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']
 input_scaling_name = "None"
@@ -86,11 +86,11 @@ nbr_seeds = 1
 file_species_names = f"Xu-state-space-names-{dataset_type}.csv" #f"Xu-state-space-names-{dataset_type}.csv" #"Xu-state-space-names.csv"
 
 learning_rates = [0.025]
-optimizers = ["adam"]
+optimizers = ["RMSprop"]
 lists_species_output_QoI = [
-    #("noLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
-    #("log10", ['logH2O2-10', 'logH2O-10', 'logH2-10', 'logHO2-10', 'logN2O-10', 'logNO2-10', 'logNO-10', 'logO2-10', 'logOH-10']),
-    ("log20", ['logH2O2-20', 'logH2O-20', 'logH2-20', 'logHO2-20', 'logN2O-20', 'logNO2-20', 'logNO-20', 'logO2-20', 'logOH-20'])
+    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH','logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
+    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
 seeds = list(range(nbr_seeds))
 
