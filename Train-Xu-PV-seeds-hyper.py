@@ -76,8 +76,8 @@ activation_function_output = "tanh"
 
 # Extra
 header_data = 'infer'
-bool_compute_Kreg = False
-nbr_seeds = 1
+bool_compute_Kreg = True
+nbr_seeds = 6
 
 ####################################
 #Set name of file with species names
@@ -89,7 +89,7 @@ learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
     ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
-    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH','logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
+    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
     ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
 seeds = list(range(nbr_seeds))
@@ -125,7 +125,7 @@ for idxConfig, config in enumerate(experiment_configs):
     species_tag = config["species_tag"]
     my_seed = config["seed"]
 
-    training_nbr = f"35aTestAutoignitionNewLib_{optimizer_name}_{int(lr*10000)}_{species_tag}"
+    training_nbr = f"1_1PV_{optimizer_name}_{int(lr*10000)}_{species_tag}"
     training_id = f"Tr{training_nbr}_s{my_seed}"
     list_ids.append(training_id)
     print(training_id)
