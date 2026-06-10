@@ -73,12 +73,12 @@ for idxConfig, config in enumerate(experiment_configs):
     input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
 
     #scale every column of the input tensor between 0 and 1
-    min_vals = input.min(dim=0, keepdim=True).values
-    max_vals = input.max(dim=0, keepdim=True).values
+    min_vals = np.min(input, axis=0, keepdims=True)
+    max_vals = np.max(input, axis=0, keepdims=True)
     input_scaled = (input - min_vals) / (max_vals - min_vals)
 
-    indepVars = input_scaled.detach().numpy()
-    depVars = output.detach().numpy()
+    indepVars = input_scaled
+    depVars = output
 
     depvar_names = loader.metadata["list_species_output_evaluation"]
     if(loader.metadata["temperature_output"]):
