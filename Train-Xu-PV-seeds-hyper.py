@@ -159,7 +159,7 @@ for idxConfig, config in enumerate(experiment_configs):
         all_output.append(f"PV{i}")
     output_dim = len(all_output) #species + Temperature and Source PV
 
-    variable_headers = ["training_id", "training_name","model_name", "curve_name", "metadata_name",
+    variable_headers = ["training_id", "training_name", "model_name", "curve_name", "metadata_name",
                         "general_dataset_type", "dataset_type", 
                         "nbr_total_datapoints", "max_epo", "epo_best_model", "optimizer_name",
                         "output_scaling", "loss_name", "lambda_reg", "PV_rescaling_init", "PV_rescaling_batch", "always_rescale_PV",

@@ -1,0 +1,115 @@
+from EncoderDecoder.utils import loadData
+
+from PCAfold import compute_normalized_variance, normalized_variance_derivative, cost_function_normalized_variance_derivative, plot_normalized_variance_derivative
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+from itertools import product
+import torch
+import logging
+
+logging.disable(logging.CRITICAL)
+
+device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+
+path_data = "data-files/"
+dataset_type = "autoignition"
+penalty_function = 'log-sigma-over-peak'
+start_bw = -6
+end_bw = 2
+nbr_points_bw = 100
+bandwidth_values = np.logspace(start_bw, end_bw, nbr_points_bw)
+power = 4
+vertical_shift = 1
+
+def compute_avg(costs):
+    n = len(costs)
+    sum = np.sum(costs**2)
+    return 1/n*np.sqrt(sum)
+
+nbr_seeds = 6
+
+learning_rates = [0.025]
+optimizers = ["RMSprop"]
+lists_species_output_QoI = [
+    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
+    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
+]
+seeds = list(range(nbr_seeds))
+
+experiment_configs = []
+
+for lr_i, opt_i, (species_tag, species_i), seed_i in product(
+    learning_rates,
+    optimizers,
+    lists_species_output_QoI,
+    seeds):
+
+    config = {
+        "lr": lr_i,
+        "optimizer": opt_i,
+        "output_species": species_i,
+        "species_tag": species_tag,
+        "seed": seed_i,
+    }
+    experiment_configs.append(config)
+
+print(f"Total number of runs: {len(experiment_configs)}")
+
+list_avg_cost = []
+
+for idxConfig, config in enumerate(experiment_configs):
+
+    optimizer_name = config["optimizer"]
+    lr = config["lr"]
+    scaling_species = config["output_species"]
+    species_tag = config["species_tag"]
+    my_seed = config["seed"]
+
+    filename = f"Tr1_1PV_RMSprop_250_{scaling_species}_s{my_seed}-AE-date_03Jun2026-hour_18h03_Xu-flamelet-augm"
+
+    loader = loadData(filename)
+    input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
+
+    #scale every column of the input tensor between 0 and 1
+    min_vals = input.min(dim=0, keepdim=True).values
+    max_vals = input.max(dim=0, keepdim=True).values
+    input_scaled = (input - min_vals) / (max_vals - min_vals)
+
+    indepVars = input_scaled.detach().numpy()
+    depVars = output.detach().numpy()
+
+    depvar_names = loader.metadata["list_species_output_evaluation"]
+    if(loader.metadata["temperature_output"]):
+        depvar_names.append("T")
+    for i in range(1,1+loader.metadata["PV_dim"]):
+        depvar_names.append(f"PV{i}")
+
+    variance_data = compute_normalized_variance(indepVars,
+                                                    depVars,
+                                                    depvar_names=depvar_names,
+                                                    bandwidth_values=bandwidth_values)
+    np.save(f"data-files/costs/variance/variance_{filename}-dataset_{dataset_type}.npy", variance_data)
+
+    costs = cost_function_normalized_variance_derivative(variance_data,
+                                                        penalty_function=penalty_function,
+                                                        power=power,
+                                                        vertical_shift=vertical_shift,
+                                                        norm=None)
+    np.save(f"data-files/costs/costs/costs_{filename}-dataset_{dataset_type}.npy", costs)
+
+    (derivative, bandwidth_values, max_derivative) = normalized_variance_derivative(variance_data)
+
+    plt = plot_normalized_variance_derivative(variance_data)
+    plt.savefig(f"data-files/costs/figure/plot_Dhat_{filename}-dataset_{dataset_type}.png")
+
+    list_avg_cost.append(compute_avg(np.array(costs)))
+    print(f"{filename} done.")
+
+print()
+print("Computation complete")
+print()
+
+for cost in list_avg_cost:
+    print(f"{np.round(cost,2)}")
