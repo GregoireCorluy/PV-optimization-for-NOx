@@ -13,7 +13,7 @@ logging.disable(logging.CRITICAL)
 device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 
 path_data = "data-files/"
-dataset_type = "autoignition"
+dataset_type = "flamelet"
 penalty_function = 'log-sigma-over-peak'
 start_bw = -6
 end_bw = 2
