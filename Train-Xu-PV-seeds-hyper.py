@@ -39,7 +39,7 @@ loss_name = "mse" #"MSE"
 lambda_reg = 1
 learning_rate_decay = "Cosine"
 cosine_alpha = 0.01
-max_epo = 3
+max_epo = 100000
 cosine_decay_steps = 100000
 optimizer_alpha = 0.9
 optimizer_momentum = 0.3
@@ -76,7 +76,7 @@ activation_function_output = "tanh"
 
 # Extra
 header_data = 'infer'
-bool_compute_Kreg = False
+bool_compute_Kreg = True
 nbr_seeds = 6
 
 ####################################
@@ -133,7 +133,7 @@ for idxConfig, config in enumerate(experiment_configs):
     species_scaling_layer = config["species_scaling_layer"]
     my_seed = config["seed"]
 
-    training_nbr = f"2Test_2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}"
+    training_nbr = f"2_2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}"
     training_id = f"Tr{training_nbr}_s{my_seed}"
     list_ids.append(training_id)
     print(training_id)
