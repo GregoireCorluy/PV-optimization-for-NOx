@@ -39,7 +39,7 @@ loss_name = "mse" #"MSE"
 lambda_reg = 1
 learning_rate_decay = "Cosine"
 cosine_alpha = 0.01
-max_epo = 100000
+max_epo = 3
 cosine_decay_steps = 100000
 optimizer_alpha = 0.9
 optimizer_momentum = 0.3
@@ -51,7 +51,7 @@ PV_rescaling_init = True
 PV_rescaling_batch = True
 scale_PV = 0.001
 always_rescale_PV = False
-PV_dim = 1
+PV_dim = 2
 extra_manifold_parameters = ["mf"]
 range_extra_manifold_parameters = 1 #from -x/2 to x/2
 
@@ -59,12 +59,12 @@ range_extra_manifold_parameters = 1 #from -x/2 to x/2
 perc_val = 0.2 #percentage of validation data
 list_species_input = ['H2NN', 'H2O2', 'H2O', 'H2', 'HNO', 'HO2', 'HONO2', 'HONO', 'H', 'N2O', 'NH2', 'NH', 'NNH', 'NO2', 'NO', 'N', 'O2', 'OH', 'O']
 list_species_output_evaluation = ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']
-input_scaling_name = "None"
+#input_scaling_name = "None"
 temperature_output = True
 output_scaling = "-1to1"
 
 # Encoder-decoder architecture
-species_scaling_layer = True
+#species_scaling_layer = True
 init_species_scaling_range = (1.0, 2.0)
 init_name_enc = "Normal"
 init_name_dec = "Normal"
@@ -76,7 +76,7 @@ activation_function_output = "tanh"
 
 # Extra
 header_data = 'infer'
-bool_compute_Kreg = True
+bool_compute_Kreg = False
 nbr_seeds = 6
 
 ####################################
@@ -88,18 +88,22 @@ file_species_names = f"Xu-state-space-names-{dataset_type}.csv" #f"Xu-state-spac
 learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
-    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    #("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
     ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
-    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
+    #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
+list_input_scaling_name = ["0to1" "-1to1", "std", "pareto", "mean-pareto"]
+list_species_scaling_layer = [False, True]
 seeds = list(range(nbr_seeds))
 
 experiment_configs = []
 
-for lr_i, opt_i, (species_tag, species_i), seed_i in product(
+for lr_i, opt_i, (species_tag, species_i), input_scaling_name, species_scaling_layer, seed_i in product(
     learning_rates,
     optimizers,
     lists_species_output_QoI,
+    list_input_scaling_name,
+    list_species_scaling_layer,
     seeds):
 
     config = {
@@ -107,6 +111,8 @@ for lr_i, opt_i, (species_tag, species_i), seed_i in product(
         "optimizer": opt_i,
         "output_species": species_i,
         "species_tag": species_tag,
+        "input_scaling_name": input_scaling_name,
+        "species_scaling_layer": species_scaling_layer,
         "seed": seed_i,
     }
     experiment_configs.append(config)
@@ -123,9 +129,11 @@ for idxConfig, config in enumerate(experiment_configs):
     lr = config["lr"]
     list_species_output = config["output_species"]
     species_tag = config["species_tag"]
+    input = config["input_scaling_name"]
+    species_scaling_layer = config["species_scaling_layer"]
     my_seed = config["seed"]
 
-    training_nbr = f"1_1PV_{optimizer_name}_{int(lr*10000)}_{species_tag}"
+    training_nbr = f"2Test_2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}"
     training_id = f"Tr{training_nbr}_s{my_seed}"
     list_ids.append(training_id)
     print(training_id)
