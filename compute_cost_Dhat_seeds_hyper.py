@@ -32,18 +32,22 @@ nbr_seeds = 6
 learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
-    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    #("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
     ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
-    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
+    #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
+list_input_scaling_name = ["0to1", "-1to1", "std", "pareto", "mean-pareto"]
+list_species_scaling_layer = [False, True]
 seeds = list(range(nbr_seeds))
 
 experiment_configs = []
 
-for lr_i, opt_i, (species_tag, species_i), seed_i in product(
+for lr_i, opt_i, (species_tag, species_i), input_scaling_name, species_scaling_layer, seed_i in product(
     learning_rates,
     optimizers,
     lists_species_output_QoI,
+    list_input_scaling_name,
+    list_species_scaling_layer,
     seeds):
 
     config = {
@@ -51,6 +55,8 @@ for lr_i, opt_i, (species_tag, species_i), seed_i in product(
         "optimizer": opt_i,
         "output_species": species_i,
         "species_tag": species_tag,
+        "input_scaling_name": input_scaling_name,
+        "species_scaling_layer": species_scaling_layer,
         "seed": seed_i,
     }
     experiment_configs.append(config)
@@ -63,11 +69,13 @@ for idxConfig, config in enumerate(experiment_configs):
 
     optimizer_name = config["optimizer"]
     lr = config["lr"]
-    scaling_species = config["output_species"]
+    list_species_output = config["output_species"]
     species_tag = config["species_tag"]
+    input_scaling_name = config["input_scaling_name"]
+    species_scaling_layer = config["species_scaling_layer"]
     my_seed = config["seed"]
 
-    filename = f"Tr1_1PV_RMSprop_250_{species_tag}_s{my_seed}-AE-date_03Jun2026-hour_18h03_Xu-flamelet-augm"
+    filename = f"Tr2_2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}_s{my_seed}-AE-date_11Jun2026-hour_19h13_Xu-flamelet-augm"
 
     loader = loadData(filename)
     input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
