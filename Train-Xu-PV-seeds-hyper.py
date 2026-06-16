@@ -117,7 +117,8 @@ for lr_i, opt_i, (species_tag, species_i), input_scaling_name, species_scaling_l
     }
     experiment_configs.append(config)
 
-print(f"Total number of runs: {len(experiment_configs)}")
+nbr_experiment_configs = len(experiment_configs)
+print(f"Total number of runs: {nbr_experiment_configs}")
 
 MSE_vals = np.zeros(len(experiment_configs))
 MSE_kr_vals = []
@@ -343,7 +344,7 @@ for idxConfig, config in enumerate(experiment_configs):
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    logging.info(f"Training finished - {np.round(elapsed_time,2)} seconds")
+    logging.info(f"Training {idxConfig}/{nbr_experiment_configs} finished - {np.round(elapsed_time,2)} seconds")
     #############
     #End training
     #############

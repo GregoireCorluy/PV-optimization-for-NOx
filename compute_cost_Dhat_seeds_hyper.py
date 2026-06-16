@@ -36,7 +36,7 @@ lists_species_output_QoI = [
     ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
     #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
-list_input_scaling_name = ["std", "pareto", "mean-pareto"] #"0to1", "-1to1", 
+list_input_scaling_name = ["mean-pareto"] #"0to1", "-1to1", "std", "pareto", 
 list_species_scaling_layer = [False, True]
 seeds = list(range(nbr_seeds))
 
@@ -61,7 +61,8 @@ for lr_i, opt_i, (species_tag, species_i), input_scaling_name, species_scaling_l
     }
     experiment_configs.append(config)
 
-print(f"Total number of runs: {len(experiment_configs)}")
+nbr_experiment_configs = len(experiment_configs)
+print(f"Total number of runs: {nbr_experiment_configs}")
 
 list_avg_cost = []
 
@@ -111,9 +112,10 @@ for idxConfig, config in enumerate(experiment_configs):
 
     plt = plot_normalized_variance_derivative(variance_data)
     plt.savefig(f"data-files/costs/figure/plot_Dhat_{filename}-dataset_{dataset_type}.png")
+    plt.close()
 
     list_avg_cost.append(compute_avg(np.array(costs)))
-    print(f"{filename} done.")
+    print(f"{idxConfig}/{nbr_experiment_configs}: {filename} done.")
 
 print()
 print("Computation complete")
