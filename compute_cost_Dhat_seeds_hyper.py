@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import sys
 from itertools import product
 import torch
+import logging
+logging.disable(logging.CRITICAL)
 
 device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 
@@ -24,13 +26,13 @@ def compute_avg(costs):
     sum = np.sum(costs**2)
     return 1/n*np.sqrt(sum)
 
-nbr_seeds = 1
+nbr_seeds = 6
 
 learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
-    #("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
-    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
+    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    #("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
     #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
 list_input_scaling_name = ["None"] #"0to1", "-1to1", "std", "pareto", "mean-pareto"
