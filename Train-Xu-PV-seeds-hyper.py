@@ -137,7 +137,7 @@ for idxConfig, config in enumerate(experiment_configs):
     training_nbr = f"2_TEST2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}"
     training_id = f"Tr{training_nbr}_s{my_seed}"
     list_ids.append(training_id)
-    print(training_id)
+    logging.info(f"Training {idxConfig+1}/{nbr_experiment_configs}: {training_id}")
 
     ###############################
     #Initialization of the training
@@ -344,7 +344,7 @@ for idxConfig, config in enumerate(experiment_configs):
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    logging.info(f"Training {idxConfig+1}/{nbr_experiment_configs} finished - {np.round(elapsed_time,2)} seconds")
+    logging.info(f"Training finished - {np.round(elapsed_time,2)} seconds")
     #############
     #End training
     #############
