@@ -344,7 +344,7 @@ for idxConfig, config in enumerate(experiment_configs):
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    logging.info(f"Training {idxConfig}/{nbr_experiment_configs} finished - {np.round(elapsed_time,2)} seconds")
+    logging.info(f"Training {idxConfig+1}/{nbr_experiment_configs} finished - {np.round(elapsed_time,2)} seconds")
     #############
     #End training
     #############

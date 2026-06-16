@@ -99,23 +99,23 @@ for idxConfig, config in enumerate(experiment_configs):
                                                     depVars,
                                                     depvar_names=depvar_names,
                                                     bandwidth_values=bandwidth_values)
-    np.save(f"data-files/costs/variance/variance_{filename}-dataset_{dataset_type}.npy", variance_data)
+    np.save(f"data-files/costs/variance/variance_TEST{filename}-dataset_{dataset_type}.npy", variance_data)
 
     costs = cost_function_normalized_variance_derivative(variance_data,
                                                         penalty_function=penalty_function,
                                                         power=power,
                                                         vertical_shift=vertical_shift,
                                                         norm=None)
-    np.save(f"data-files/costs/costs/costs_{filename}-dataset_{dataset_type}.npy", costs)
+    np.save(f"data-files/costs/costs/costs_TEST{filename}-dataset_{dataset_type}.npy", costs)
 
     (derivative, bandwidth_values, max_derivative) = normalized_variance_derivative(variance_data)
 
     plt = plot_normalized_variance_derivative(variance_data)
-    plt.savefig(f"data-files/costs/figure/plot_Dhat_{filename}-dataset_{dataset_type}.png")
+    plt.savefig(f"data-files/costs/figure/plot_Dhat_TEST{filename}-dataset_{dataset_type}.png")
     plt.close()
 
     list_avg_cost.append(compute_avg(np.array(costs)))
-    print(f"{idxConfig}/{nbr_experiment_configs}: {filename} done.")
+    print(f"{idxConfig+1}/{nbr_experiment_configs}: {filename} done.")
 
 print()
 print("Computation complete")
