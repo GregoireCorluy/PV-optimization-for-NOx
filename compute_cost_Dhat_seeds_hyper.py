@@ -78,11 +78,8 @@ for idxConfig, config in enumerate(experiment_configs):
 
     filename = f"Tr2_TEST2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}_s{my_seed}-AE-date_16Jun2026-hour_15h14_Xu-flamelet-augm"
 
-    print("Before loader")
     loader = loadData(filename)
-    print("After loader and before get input-output")
     input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
-    print("after get input-output")
 
     #scale every column of the input tensor between 0 and 1
     min_vals = np.min(input, axis=0, keepdims=True)
