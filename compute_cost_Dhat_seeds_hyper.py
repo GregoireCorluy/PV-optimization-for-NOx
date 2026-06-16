@@ -27,7 +27,7 @@ def compute_avg(costs):
     sum = np.sum(costs**2)
     return 1/n*np.sqrt(sum)
 
-nbr_seeds = 6
+nbr_seeds = 1
 
 learning_rates = [0.025]
 optimizers = ["RMSprop"]
@@ -36,8 +36,8 @@ lists_species_output_QoI = [
     ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
     #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
-list_input_scaling_name = ["mean-pareto"] #"0to1", "-1to1", "std", "pareto", 
-list_species_scaling_layer = [False, True]
+list_input_scaling_name = ["None"] #"0to1", "-1to1", "std", "pareto", "mean-pareto"
+list_species_scaling_layer = [True]
 seeds = list(range(nbr_seeds))
 
 experiment_configs = []
@@ -76,7 +76,7 @@ for idxConfig, config in enumerate(experiment_configs):
     species_scaling_layer = config["species_scaling_layer"]
     my_seed = config["seed"]
 
-    filename = f"Tr2_TEST2PV_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}_s{my_seed}-AE-date_16Jun2026-hour_15h14_Xu-flamelet-augm"
+    filename = f"Tr1_1PV_RMSprop_250_{species_tag}_s{my_seed}-AE-date_03Jun2026-hour_18h03_Xu-flamelet-augm"
 
     loader = loadData(filename)
     input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
@@ -99,27 +99,25 @@ for idxConfig, config in enumerate(experiment_configs):
                                                     depVars,
                                                     depvar_names=depvar_names,
                                                     bandwidth_values=bandwidth_values)
-    np.save(f"data-files/costs/variance/variance_{filename}-dataset_{dataset_type}.npy", variance_data)
+    np.save(f"data-files/costs/variance/variance_{filename}Bis-dataset_{dataset_type}.npy", variance_data)
 
     costs = cost_function_normalized_variance_derivative(variance_data,
                                                         penalty_function=penalty_function,
                                                         power=power,
                                                         vertical_shift=vertical_shift,
                                                         norm=None)
-    np.save(f"data-files/costs/costs/costs_{filename}-dataset_{dataset_type}.npy", costs)
+    np.save(f"data-files/costs/costs/costs_{filename}Bis-dataset_{dataset_type}.npy", costs)
 
     (derivative, bandwidth_values, max_derivative) = normalized_variance_derivative(variance_data)
 
     plt = plot_normalized_variance_derivative(variance_data)
-    plt.savefig(f"data-files/costs/figure/plot_Dhat_{filename}-dataset_{dataset_type}.png")
+    plt.savefig(f"data-files/costs/figure/plot_Dhat_{filename}Bis-dataset_{dataset_type}.png")
     plt.close()
 
     list_avg_cost.append(compute_avg(np.array(costs)))
-    print(f"{idxConfig+1}/{nbr_experiment_configs}: {filename} done.")
+    logging.info(f"{idxConfig+1}/{nbr_experiment_configs}: {filename} done.")
 
-print()
-print("Computation complete")
-print()
+logging.info("Computation complete")
 
 for cost in list_avg_cost:
     print(f"{np.round(cost,2)}")
