@@ -1,4 +1,4 @@
-from EncoderDecoder.utils import loadData
+from EncoderDecoder.utils import loadData, compute_avg
 
 from PCAfold import compute_normalized_variance, normalized_variance_derivative, cost_function_normalized_variance_derivative, plot_normalized_variance_derivative
 import numpy as np
@@ -20,11 +20,6 @@ nbr_points_bw = 100
 bandwidth_values = np.logspace(start_bw, end_bw, nbr_points_bw)
 power = 4
 vertical_shift = 1
-
-def compute_avg(costs):
-    n = len(costs)
-    sum = np.sum(costs**2)
-    return 1/n*np.sqrt(sum)
 
 nbr_seeds = 6
 
