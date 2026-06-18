@@ -26,9 +26,9 @@ nbr_seeds = 6
 learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
-    ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
+    #("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
     ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
-    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
+    #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
 list_input_scaling_name = ["None"] #"0to1", "-1to1", "std", "pareto", "mean-pareto"
 list_species_scaling_layer = [True]
@@ -109,7 +109,7 @@ for idxConfig, config in enumerate(experiment_configs):
     plt.close()
 
     list_avg_cost.append(compute_avg(np.array(costs)))
-    print(f"{idxConfig+1}/{nbr_experiment_configs}: {filename} done. Average cost of {np.round(compute_avg(np.array(costs)),2)}")
+    print(f"{idxConfig+1}/{nbr_experiment_configs}: {filename} done. Average cost of {np.round(compute_avg(np.array(costs)),2)}.")
 
 print()
 print("Computation complete")
