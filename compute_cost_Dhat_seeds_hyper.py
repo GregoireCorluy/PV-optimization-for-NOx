@@ -70,7 +70,7 @@ for idxConfig, config in enumerate(experiment_configs):
     species_scaling_layer = config["species_scaling_layer"]
     my_seed = config["seed"]
 
-    filename = f"Tr1_1PV_RMSprop_250_{species_tag}_s{my_seed}-AE-date_03Jun2026-hour_18h03_Xu-flamelet-augm"
+    filename = f"Tr2_2PV_RMSprop_250_{species_tag}_{input_scaling_name}_scaling{species_scaling_layer}_s{my_seed}-AE-date_23Jun2026-hour_15h47_Xu-flamelet-augm"
 
     loader = loadData(filename)
     input, output = loader.getInputOutputAnalysis(path_data, dataset_type)
