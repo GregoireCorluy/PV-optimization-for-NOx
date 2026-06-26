@@ -9,7 +9,7 @@ import torch
 import logging
 logging.disable(logging.CRITICAL)
 
-device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 path_data = "data-files/"
 dataset_type = "flamelet"
@@ -27,10 +27,10 @@ learning_rates = [0.025]
 optimizers = ["RMSprop"]
 lists_species_output_QoI = [
     ("lin", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH']),
-    ("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
-    ("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
+    #("linLog", ['H2O2', 'H2O', 'H2', 'HO2', 'N2O', 'NO2', 'NO', 'O2', 'OH', 'logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH']),
+    #("log", ['logH2O2', 'logH2O', 'logH2', 'logHO2', 'logN2O', 'logNO2', 'logNO', 'logO2', 'logOH'])
 ]
-list_input_scaling_name = ["0to1", "-1to1", "std", "pareto", "mean-pareto"] #"0to1", "-1to1", "std", "pareto", "mean-pareto"
+list_input_scaling_name = ["std", "pareto", "mean-pareto"] #"0to1", "-1to1", "std", "pareto", "mean-pareto"
 list_species_scaling_layer = [False, True]
 seeds = list(range(nbr_seeds))
 
